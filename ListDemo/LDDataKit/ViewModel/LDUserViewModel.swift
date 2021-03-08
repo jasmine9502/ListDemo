@@ -34,11 +34,12 @@ class LDUserViewModel: NSObject {
 }
 
 extension LDUserViewModel: LDUserViewModelType {
+    //MARK: 输入
     struct LDUserInput {
-        //搜索词变化
+        //搜索词变化（searchbar）
         let keywordTrigger: Driver<String>
     }
-    
+    //MARK: 输出
     struct LDUserOutput {
         // tableView的sections数据
         let sections: Driver<[LDUserSction]>
@@ -48,49 +49,48 @@ extension LDUserViewModel: LDUserViewModelType {
         let refreshStatus = Variable<LDRefreshStatus>(.none)
     }
     
+    //MARK:实现从输入到输出
     func transform(input: LDUserViewModel.LDUserInput) -> LDUserViewModel.LDUserOutput {
+        // 监听section
         let sections = models.asObservable().map { (models) -> [LDUserSction] in
-            // 当models的值被改变时会调用
             return [LDUserSction(items: models)]
         }.asDriver(onErrorJustReturn: [])
         
-        let elements = BehaviorRelay<[LDUserSction]>(value: [])
+        let returnData = BehaviorRelay<[LDUserSction]>(value: [])
         let output = LDUserOutput(sections: sections)
         
-        
+        //输入与keyword绑定
         input.keywordTrigger.skip(1).throttle(DispatchTimeInterval.milliseconds(300)).distinctUntilChanged().asObservable().bind(to: searchKeyword).disposed(by: disposeBag)
         
-        
-        Observable.combineLatest(searchKeyword, output.requestCommond.asObservable())
-            .map({ [self] (keyword, isReloadData) -> [LDUserSction] in
-                var elements: [LDUserSction] = []
-                var searchKeyword = keyword
-                if (keyword == "") {
-                    searchKeyword = "swift"
-                }
-                self.index = isReloadData ? 1 : self.index+1
-                ApiProvider.rx.request(.getUser(keyWork:searchKeyword, intPage: self.index))
-                    .asObservable()
-                    .mapObject(LDReturnData.self)
-                    .subscribe({ [weak self] (event:Event) in
-                        switch event {
-                        case let .next(response):
-                            var users: [LDUserModel] = []
-                            if ((response.items) != nil) {
-                                users = response.items!
-                                self?.models.value = isReloadData ? users : (self?.models.value ?? []) + users
-                                //elements = isReloadData ? users : (self?.models.value ?? []) + users
-                            } else {
-                                showTipStr(info: "加载失败")
-                            }
-                        case let .error(error):
-                            showTipStr(info: error.localizedDescription)
-                        case .completed:
-                            output.refreshStatus.value = isReloadData ? .endHeaderRefresh : .endFooterRefresh
+        Observable.combineLatest(searchKeyword, output.requestCommond) { [self] strElement, isReloadData in
+            var searchKeyword = strElement
+            if (strElement == "") {
+                searchKeyword = "swift"
+            }
+            self.index = isReloadData ? 1 : self.index+1
+            ApiProvider.rx.request(.getUser(keyWork:searchKeyword, intPage: self.index))
+                .asObservable()
+                .mapObject(LDReturnData.self)
+                .subscribe({ [weak self] (event:Event) in
+                    switch event {
+                    case let .next(response):
+                        var users: [LDUserModel] = []
+                        if ((response.items) != nil) {
+                            users = response.items!
+                            self?.models.value = isReloadData ? users : (self?.models.value ?? []) + users
+                        } else {
+                            showTipStr(info: "加载失败")
                         }
-                    }).disposed(by: disposeBag)
-                return elements
-            }).bind(to: elements).disposed(by: disposeBag)
+                    case let .error(error):
+                        showTipStr(info: error.localizedDescription)
+                    case .completed:
+                        output.refreshStatus.value = isReloadData ? .endHeaderRefresh : .endFooterRefresh
+                    }
+                }).disposed(by: self.disposeBag)
+            return returnData
+        }
+        .subscribe(onNext: { print($0) })
+        .disposed(by: disposeBag)
         return output
     }
 }

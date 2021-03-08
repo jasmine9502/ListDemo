@@ -38,3 +38,20 @@ func showTipStr(info:String) {
     hud.label.text = info
     hud.hide(animated: true, afterDelay: 0.8)
 }
+
+
+//MARK:黑暗模式
+/// 设置border
+public func configborderColor() -> UIColor {
+    if #available(iOS 13.0, *) {
+        return UIColor{(trainCollection) -> UIColor in
+            if trainCollection.userInterfaceStyle == .dark {
+                return UIColor.black
+            } else {
+                return UIColor.white
+            }
+        }
+    } else {
+        return UIColor.white
+    }
+}

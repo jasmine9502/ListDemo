@@ -14,7 +14,7 @@ import Kingfisher
 
 class LDUserListViewController: LDBaseViewController, UIScrollViewDelegate, UISearchBarDelegate {
     
-
+    //MARK:声明
     @IBOutlet weak var userSearchBar: UISearchBar!
     @IBOutlet weak var userListTableView: UITableView!
     
@@ -31,10 +31,9 @@ class LDUserListViewController: LDBaseViewController, UIScrollViewDelegate, UISe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //注册cell
         self.userListTableView?.register(UINib.init(nibName: "LDUserCell", bundle: Bundle.main), forCellReuseIdentifier: "LDUserCell")
-        self.userSearchBar.delegate = self
-        self.userSearchBar.layer.borderWidth = 1
-        self.userSearchBar.layer.borderColor = UIColor.white.cgColor
+        configSearchUI()
         bindView()
         // 加载数据
         self.userListTableView.mj_header!.beginRefreshing()
@@ -45,13 +44,25 @@ class LDUserListViewController: LDBaseViewController, UIScrollViewDelegate, UISe
         self.navigationController?.navigationBar.isHidden = true;
     }
     
+    //MARK:searchbar
+    func configSearchUI() {
+        self.userSearchBar.delegate = self
+        guard let searchField = self.userSearchBar.value(forKey: "searchField") as? UITextField else {
+            return
+        }
+        searchField.layer.cornerRadius = 18
+        searchField.layer.masksToBounds = true
+        self.userSearchBar.layer.borderWidth = 1
+        self.userSearchBar.layer.borderColor = configborderColor().cgColor
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.userSearchBar.resignFirstResponder()
     }
 }
 
 extension LDUserListViewController {
-    
+    //MARK:数据绑定
     fileprivate func bindView() {
         // 设置代理
         self.userListTableView.rx.setDelegate(self).disposed(by: disposeBag)
@@ -88,7 +99,7 @@ extension LDUserListViewController {
             vmOutput.requestCommond.onNext(false)
         })
         
-        //列表点击
+        //列表点击事件
         self.userListTableView.rx.itemSelected
             .map { [weak self] indexPath in
                 return (indexPath, self?.dataSource[indexPath])
