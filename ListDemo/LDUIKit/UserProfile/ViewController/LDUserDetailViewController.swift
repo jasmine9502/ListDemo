@@ -53,8 +53,15 @@ class LDUserDetailViewController: LDBaseViewController {
         }
     }
     
+    //移除观察者
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         progressView.setProgress(0.0, animated: false)
         self.navigationItem.title = webView.title
+    }
+    
+    deinit {
+        print("con is deinit")
+        webView.removeObserver(self, forKeyPath: "estimatedProgress")
+        progressView.reloadInputViews()
     }
 }
