@@ -1,5 +1,10 @@
-# ListDemo
+## ListDemo
 a simple GitHub Users List Demo which based on MVVM+Rxswift
+
+## How it designed
+first compelete the view part ,then make data binding to the view via viewModel.
+
+about viewmodel:list the input and output,comfirm the protocol and you will get the data you want.
 
 
 ## Building and Running
