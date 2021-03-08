@@ -17,21 +17,44 @@ class LDUserDetailViewController: LDBaseViewController {
         self.webUrl = url
     }
     
-    var webview = WKWebView()
+    private var webView = WKWebView()
+    private var progressView = UIProgressView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //创建wkwebview
-        let webView = WKWebView(frame: CGRect(x:0, y:0, width:UIScreen.main.bounds.size.width, height:UIScreen.main.bounds.size.height))
-        //创建请求
-        webView.load(URLRequest.init(url: URL.init(string: self.webUrl!)!))
-        //添加wkwebview
-        self.view.addSubview(webView)
+        configUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = false;
     }
-
+    
+    //MARK:webView & progressView
+    func configUI() {
+        //wkwebview
+        webView = WKWebView(frame: CGRect(x:0, y:0, width:UIScreen.main.bounds.size.width, height:UIScreen.main.bounds.size.height))
+        //创建请求
+        webView.load(URLRequest.init(url: URL.init(string: self.webUrl!)!))
+        self.view.addSubview(webView)
+        webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
+        //progressView
+        progressView = UIProgressView(frame: CGRect(x: 0, y: 44-2, width: UIScreen.main.bounds.size.width, height: 2))
+        progressView.trackTintColor = UIColor.white
+        progressView.progressTintColor = UIColor.black
+        self.navigationController?.navigationBar.addSubview(progressView)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if (keyPath == "estimatedProgress") {
+            progressView.isHidden = webView.estimatedProgress == 1
+            progressView.setProgress(Float(webView.estimatedProgress), animated: true)
+            print(webView.estimatedProgress)
+        }
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        progressView.setProgress(0.0, animated: false)
+        self.navigationItem.title = webView.title
+    }
 }
