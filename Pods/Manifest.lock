@@ -1,0 +1,74 @@
+PODS:
+  - Alamofire (5.0.4)
+  - Differentiator (4.0.1)
+  - Kingfisher (5.13.2):
+    - Kingfisher/Core (= 5.13.2)
+  - Kingfisher/Core (5.13.2)
+  - MBProgressHUD (1.2.0)
+  - MJRefresh (3.3.1)
+  - Moya/Core (14.0.0):
+    - Alamofire (~> 5.0)
+  - Moya/RxSwift (14.0.0):
+    - Moya/Core
+    - RxSwift (~> 5.0)
+  - ObjectMapper (4.2.0)
+  - Reusable (4.1.1):
+    - Reusable/Storyboard (= 4.1.1)
+    - Reusable/View (= 4.1.1)
+  - Reusable/Storyboard (4.1.1)
+  - Reusable/View (4.1.1)
+  - RxCocoa (5.1.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxDataSources (4.0.1):
+    - Differentiator (~> 4.0)
+    - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
+  - RxRelay (5.1.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.1.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - Kingfisher (~> 5.0)
+  - MBProgressHUD
+  - MJRefresh
+  - Moya/RxSwift
+  - ObjectMapper
+  - Reusable
+  - RxCocoa (~> 5.1.1)
+  - RxDataSources (~> 4.0)
+  - RxSwift (~> 5.0)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Differentiator
+    - Kingfisher
+    - MBProgressHUD
+    - MJRefresh
+    - Moya
+    - ObjectMapper
+    - Reusable
+    - RxCocoa
+    - RxDataSources
+    - RxRelay
+    - RxSwift
+
+SPEC CHECKSUMS:
+  Alamofire: 0fe5fd24b4298dc377a6550da7d5f1b30e286fcb
+  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
+  Kingfisher: d342c8354c10c3d85a27d6d4c42c41285924b898
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  MJRefresh: eeda70fbf0ad277f3178cef1cd0c3532591d6237
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
+  Reusable: 53a9acf5c536f229b31b5865782414b508252ddb
+  RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
+  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
+  RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+
+PODFILE CHECKSUM: 47879900f8915410e4cfb0884d4fd9bb4b75f16e
+
+COCOAPODS: 1.8.4
