@@ -8,8 +8,8 @@
 import Foundation
 import MBProgressHUD
 
-let kscreenWidth = UIScreen.main.bounds.width
-let kscreenHeight = UIScreen.main.bounds.height
+let screenWidth = UIScreen.main.bounds.width
+let screenHeight = UIScreen.main.bounds.height
 
 var topVC: UIViewController? {
     var resultVC: UIViewController?
