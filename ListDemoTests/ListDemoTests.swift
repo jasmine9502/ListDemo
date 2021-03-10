@@ -29,5 +29,14 @@ class ListDemoTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
+    
+    //测试接口正确性
+    func testSendNetwork() {
+        let urlSesssion = URLSession(configuration: URLSessionConfiguration.default)
+        guard let url = URL(string: "​https://api.github.com/search/users?q=swift&page=1​") else { return }
+        let dataTask = urlSesssion.dataTask(with: url) { (data, response, error) in
+            XCTAssertNotNil(data, "No data")
+        }
+        dataTask.resume()
+    }
 }

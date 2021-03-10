@@ -100,15 +100,10 @@ extension LDUserListViewController {
         })
         
         //列表点击事件
-        self.userListTableView.rx.itemSelected
-            .map { [weak self] indexPath in
-                return (indexPath, self?.dataSource[indexPath])
-            }
-            .subscribe(onNext: {(indexPath, item) in
-                let vc = LDUserDetailViewController(url: item?.html_url)
-                self.navigationController?.pushViewController(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
+        self.userListTableView.rx.itemSelected.bind { [weak self] (indexPath) in
+            let vc = LDUserDetailViewController(url: self!.dataSource[indexPath].html_url)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }.disposed(by: disposeBag)
     }
 }
 

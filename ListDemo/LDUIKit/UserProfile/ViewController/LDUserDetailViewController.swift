@@ -39,7 +39,7 @@ class LDUserDetailViewController: LDBaseViewController {
         self.view.addSubview(webView)
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
         //progressView
-        progressView = UIProgressView(frame: CGRect(x: 0, y: 44-2, width: UIScreen.main.bounds.size.width, height: 2))
+        progressView = UIProgressView(frame: CGRect(x: 0, y: 44-1, width: UIScreen.main.bounds.size.width, height: 1))
         progressView.trackTintColor = UIColor.white
         progressView.progressTintColor = UIColor.black
         self.navigationController?.navigationBar.addSubview(progressView)
@@ -49,7 +49,6 @@ class LDUserDetailViewController: LDBaseViewController {
         if (keyPath == "estimatedProgress") {
             progressView.isHidden = webView.estimatedProgress == 1
             progressView.setProgress(Float(webView.estimatedProgress), animated: true)
-            print(webView.estimatedProgress)
         }
     }
     
